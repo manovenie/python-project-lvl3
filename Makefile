@@ -13,9 +13,6 @@ package-install: ## Install built package
 package-reinstall: ## Reinstall built package
 	python3 -m pip install --user --force-reinstall dist/*.whl
 
-page-loader: ## Run main program
-	poetry run page-loader
-
 lint: ## Run linter
 	poetry run flake8 page_loader
 
