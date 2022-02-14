@@ -1,10 +1,10 @@
 # !/usr/bin/env python3
 
-# from page_loader.page_loader import __
+from page_loader.page_loader import download
 
 
 def main():
-    pass
+    download()
 
 
 if __name__ == '__main__':
