@@ -16,6 +16,9 @@ package-reinstall: ## Reinstall built package
 lint: ## Run linter
 	poetry run flake8 page_loader
 
+page-loader: ## Run main program
+	poetry run page-loader
+
 test: ## Run tests
 	poetry run pytest
 
