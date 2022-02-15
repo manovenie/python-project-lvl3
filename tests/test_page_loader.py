@@ -1,4 +1,4 @@
 
 
 def test_page_loader():
-    pass
+    assert 2 == 2
