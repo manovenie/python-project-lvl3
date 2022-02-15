@@ -7,7 +7,7 @@ def main():
     arguments = parse_cli_args()
     url = arguments.URL
     output_path = arguments.output
-    file_path = download(url=url, path=output_path)
+    file_path = download(url=url, initial_path=output_path)
     print(file_path)
 
 
