@@ -4,9 +4,9 @@ from page_loader.page_loader import download
 
 
 def main():
-    arguments = parse_cli_args() # .output_path & .url
+    arguments = parse_cli_args()
     page = download(url=arguments.url, path=arguments.output_path)
-    print(page) # NB! print path
+    print(page)
 
 
 if __name__ == '__main__':
