@@ -13,6 +13,7 @@ page-loader = "page_loader.scripts.main:main"
 [tool.poetry.dependencies]
 python = "^3.8"
 requests = "^2.27.1"
+requests-mock = "^1.9.3"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^4.0.1"
