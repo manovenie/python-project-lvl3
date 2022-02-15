@@ -4,6 +4,9 @@ version = "0.1.0"
 description = "Third python project on hexlet"
 authors = ["Ilya Dutlov <id@dutlov.ru>"]
 
+[tool.poetry.scripts]
+page-loader = "page_loader.scripts.main:main"
+
 [tool.poetry.dependencies]
 python = "^3.8"
 
