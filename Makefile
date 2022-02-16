@@ -2,7 +2,7 @@ install: ## Install dependencies
 	poetry install
 
 test-coverage: ## Prepare coverage report for Codeclimate
-	poetry run pytest --cov=page-loader --cov-report xml
+	poetry run coverage xml
 
 build: ## Build a package
 	poetry build

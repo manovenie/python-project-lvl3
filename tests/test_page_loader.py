@@ -6,7 +6,7 @@ import os
 from page_loader.page_loader import download
 from pathlib import Path, PurePath
 
-TEST_URL = 'https://ru.hexlet.io/courses'
+TEST_URL = 'https://ru.hexlet.io/'
 HTML_FIXTURE = 'tests/fixtures/hexlet.html'
 
 def test_page_loader(requests_mock, tmpdir):
