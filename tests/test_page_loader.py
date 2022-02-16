@@ -15,12 +15,3 @@ def test_page_loader(requests_mock, tmpdir):
     real_page = Path(PurePath(real_html)).read_bytes()
     expected_page = Path(PurePath(HTML_FIXTURE)).read_bytes()
     assert real_page == expected_page
-
-'''
-def test_page_loader(requests_mock):
-    full_path = download(url=TEST_URL,
-                      initial_path=os.getcwd())
-    with open(full_path, 'r') as result_file:
-        with open('tests/fixtures/hexlet.html', 'r') as fixture_file:
-            assert result_file.read() == fixture_file.read()
-'''
