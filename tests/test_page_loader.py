@@ -11,7 +11,7 @@ HTML_FIXTURE = 'tests/fixtures/hexlet.html'
 
 def test_page_loader(requests_mock, tmpdir):
     requests_mock.get(TEST_URL)
-    real_html = download(TEST_URL, os.getcwd())
+    real_html = download(TEST_URL, tmpdir)
     real_page = Path(PurePath(real_html)).read_bytes()
     expected_page = Path(PurePath(HTML_FIXTURE)).read_bytes()
     assert real_page == expected_page
