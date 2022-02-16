@@ -5,7 +5,7 @@ import re
 def download(url, initial_path):
     r = requests.get(url)
     if r.ok:
-        received_html = r.text
+        received_html = r.content
         full_path = generate_full_path(url, initial_path)
         write_file_to_path(full_path, received_html)
         return full_path
@@ -23,6 +23,5 @@ def generate_full_path(url, initial_path):
 
 
 def write_file_to_path(full_path, html):
-    with open(full_path, 'w') as file:
+    with open(full_path, 'wb') as file:
         file.write(html)
-    return
