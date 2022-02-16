@@ -51,7 +51,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 name = "coverage"
 version = "6.3.1"
 description = "Code coverage measurement for Python"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -258,7 +258,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "673b5df79a47f81bae2d789d246bf3e90705da2332160061b7b4f20d8d1cbed3"
+content-hash = "39c3b113bdb2df76c6afdfc72e223c5453dee43dfdd29eebc960d20ba5892997"
 
 [metadata.files]
 atomicwrites = [
