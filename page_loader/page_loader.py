@@ -11,7 +11,7 @@ def download(url, initial_path):
         # create folder for img
         # download img via tags and place them in folder
         # change links to imgs in generated file
-        return full_path
+        return full_html_path
     return None
 
 
