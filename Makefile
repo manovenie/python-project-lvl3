@@ -16,6 +16,8 @@ package-reinstall: ## Reinstall built package
 lint: ## Run linter
 	poetry run flake8 page_loader
 
+# https://ru.hexlet.io/courses
+
 page-loader: ## Run main program
 	poetry run page-loader
 

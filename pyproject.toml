@@ -13,6 +13,7 @@ page-loader = "page_loader.scripts.main:main"
 [tool.poetry.dependencies]
 python = "^3.8"
 requests = "^2.27.1"
+beautifulsoup4 = "^4.10.0"
 
 [tool.poetry.dev-dependencies]
 requests-mock = "^1.9.3"
