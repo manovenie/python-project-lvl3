@@ -10,9 +10,9 @@ import os
 @pytest.mark.parametrize('URL, get_name, file_status, dir_status,', [
     ('https://github.com/dutlov/python-project-lvl3',
      'github-com-dutlov-python-project-lvl3.html', None, None),
-    ('https://github.com/K0Hb/python-project-lvl3',
+    ('https://github.com/dutlov/python-project-lvl3',
      'github-com-dutlov-python-project-lvl3_files', None, True),
-    ('https://github.com/K0Hb/python-project-lvl3.css',
+    ('https://github.com/dutlov/python-project-lvl3.css',
      'github-com-dutlov-python-project-lvl3.css', True, None)
 ])
 def test_get_name(URL, get_name, dir_status, file_status):
