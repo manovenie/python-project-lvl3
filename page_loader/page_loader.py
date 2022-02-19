@@ -79,7 +79,7 @@ def load_page(url):
             requests.exceptions.InvalidSchema) as e:
         raise Exception('Wrong address') from e
     except requests.exceptions.HTTPError as e:
-        raise Exception('Connection failed') from e:
+        raise Exception('Connection failed') from e
     except requests.exceptions.ConnectionError as e:
         raise Exception('Connection error') from e
     return response.text
@@ -113,7 +113,17 @@ def save_file(data, path):
 
 def upload_files(source):
     logging.info('Uploading resources from page to local folder')
+    bar = IncrementalBar('Uploading files', max=len(source))
     for link, path in source:
-        r = requests.get(link)
-        data = r.content
-        save_file(data, path)
+        try:
+            r = requests.get(link)
+            r.raise_for_status()
+        except requests.exceptions.HTTPError as e:
+            raise Exception('Connection failed') from e
+        else:
+            data = r.content
+            save_file(data, path)
+            bar.next()
+        finally:
+            continue
+    bar.finish()
