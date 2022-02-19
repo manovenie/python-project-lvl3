@@ -7,13 +7,15 @@ from bs4 import BeautifulSoup
 WANTED_TAGS = ('img')
 
 
-def download(url, initial_path):
+def download(url, cli_path):
     html_page = load_page(url)
-    html_page_path = format_local_name(url, initial_path, ext='.html')
-    resource_path = format_local_name(url, initial_path, ext='_files')
-    os.mkdir(resource_path)
-    html = prepare_soup(html_page, resource_path)
-    write_file_to_path(html_page_path, html.encode())
+    name_page = format_local_name(url)
+    path_page = os.path.join(cli_path, name_page)
+    name_folder = format_local_name(url, dir=True)
+    path_folder = os.path.join(cli_path, name_folder)
+    # create dir
+    os.mkdir(path_folder)
+    # refactor logic
     return html_page_path
 
 
@@ -54,10 +56,6 @@ def format_local_name(url, file=None, dir=None):
     else:
         final_name += '.html'
     return final_name
-
-
-def format_str(string):
-    return re.sub(r'[^a-zA-Z0-9]', '-', string)
 
 
 def format_resource(string):
