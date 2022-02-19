@@ -2,6 +2,7 @@ import requests
 import re
 import os
 from bs4 import BeautifulSoup
+from urllib.parse import urlparse, urljoin
 
 
 WANTED_TAGS = ('img')
@@ -11,15 +12,19 @@ def download(url, cli_path):
     html_page = load_page(url)
     name_page = format_local_name(url)
     path_page = os.path.join(cli_path, name_page)
-    name_folder = format_local_name(url, dir=True)
-    path_folder = os.path.join(cli_path, name_folder)
+    name_files_folder = format_local_name(url, dir=True)
+    path_files_folder = os.path.join(cli_path, name_files_folder)
     os.mkdir(path_folder)
+    edited_page, resources = get_links_and_edit_page(html_page, url, path_files_folder)
 
     return html_page_path
 
 
-def get_links_and_edit_page(html_page, resource_path):
+def edit_page_and_get_links(html_page, url, path_files_folder):
+    dir_path, dir_name = os.path.split(path_files_folder)
     soup = BeautifulSoup(html_page, 'html.parser')
+    elements = []
+    result = []
     images = soup.find_all('img')
     html = soup.prettify(formatter='html5')
     for img in images:
