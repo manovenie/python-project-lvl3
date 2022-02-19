@@ -21,17 +21,19 @@ def download(url, cli_path):
         edit_page_and_get_links(html_page, url, path_files_folder)
     save_file(edited_page, path_page)
     upload_files(resources)
-    logger.debug('Finishing downloading page and resources')
+    logger.debug('Page and resources loaded')
     return path_page
 
 
 def is_local(pointer, url):
+    logging.info('Checking if file is local')
     first = urlparse(url).netloc
     second = urlparse(urljoin(url, pointer)).netloc
     return first == second
 
 
 def edit_page_and_get_links(html_page, url, path_files_folder):
+    logging.info('Editing page and getting links for wanted tags')
     dir_path, dir_name = os.path.split(path_files_folder)
     soup = BeautifulSoup(html_page, 'html.parser')
     elements = [item for item in soup.find_all(list(WANTED_TAGS))
@@ -52,6 +54,7 @@ def edit_page_and_get_links(html_page, url, path_files_folder):
 
 
 def load_page(url):
+    logging.info('Loading page and getting response')
     response = requests.get(url)
     if response.ok:
         return response.text
@@ -75,11 +78,13 @@ def format_local_name(url, file=None, dir=None):
 
 
 def save_file(data, path):
+    logging.info('Writing binary info to file, saving it')
     with open(path, 'wb') as file:
         file.write(data)
 
 
 def upload_files(source):
+    logging.info('Uploading resources from page to local folder')
     for link, path in source:
         r = requests.get(link)
         data = r.content
