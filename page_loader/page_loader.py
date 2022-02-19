@@ -33,7 +33,7 @@ def edit_page_and_get_links(html_page, url, path_files_folder):
     soup = BeautifulSoup(html_page, 'html.parser')
     elements = [item for item in soup.find_all(list(WANTED_TAGS))
                 if is_local(item.get(WANTED_TAGS[item.name]), url)]
-    result = []
+    links = []
     for element in elements:
         tag = WANTED_TAGS[element.name]
         link = urljoin(url, element.get(tag, ''))
@@ -43,9 +43,9 @@ def edit_page_and_get_links(html_page, url, path_files_folder):
             resource_path = \
                 os.path.join(dir_name, format_local_name(link, file=True))
         element[tag] = resource_path
-        result.append((link, os.path.join(dir_path, resource_path)))
-    edited_page = soup.prettify()
-    return edited_page
+        links.append((link, os.path.join(dir_path, resource_path)))
+    edited_page = soup.prettify("utf-8")
+    return edited_page, links
 
 
 def load_page(url):
