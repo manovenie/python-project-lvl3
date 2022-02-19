@@ -8,9 +8,9 @@ WANTED_TAGS = ('img')
 
 
 def download(url, initial_path):
-    html_page = get_html_page(url)
-    html_page_path = create_name_or_path(url, initial_path, ext='.html')
-    resource_path = create_name_or_path(url, initial_path, ext='_files')
+    html_page = load_page(url)
+    html_page_path = format_local_name(url, initial_path, ext='.html')
+    resource_path = format_local_name(url, initial_path, ext='_files')
     os.mkdir(resource_path)
     html = prepare_soup(html_page, resource_path)
     write_file_to_path(html_page_path, html.encode())
@@ -24,7 +24,7 @@ def prepare_soup(html_page, resource_path):
     for img in images:
         link = img['src']
         img_bytes = requests.get(link).content
-        img_name = create_name_or_path(link, resource_path, path_needed=False)
+        img_name = format_local_name(link, resource_path)
         full_path = resource_path + '/' + img_name
         write_file_to_path(full_path, img_bytes)
         soup_html = BeautifulSoup(html, 'html.parser')
@@ -34,21 +34,26 @@ def prepare_soup(html_page, resource_path):
     return html
 
 
-def get_html_page(url):
+def load_page(url):
     response = requests.get(url)
     if response.ok:
         return response.text
 
 
-def create_name_or_path(url, initial_path, ext=None, path_needed=True):
-    url_stripped = re.search(r'(?<=https://).*', url)
-    if url_stripped:
-        url_without_scheme = url_stripped.group()
-        if path_needed:
-            file_name = format_str(url_without_scheme)
-            full_path = initial_path + '/' + file_name + ext
-            return full_path
-        return format_resource(url_without_scheme)
+def format_local_name(url, file=None, dir=None):
+    link = url.rstrip('/')
+    o = urlparse(link)
+    name = o.netloc + o.path
+    if file:
+        name, name_ext = os.path.splitext(name)
+    final_name = re.sub(r'\W', '-', name)
+    if file:
+        final_name += name_ext
+    elif dir:
+        final_name += '_files'
+    else:
+        final_name += '.html'
+    return final_name
 
 
 def format_str(string):
