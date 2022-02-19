@@ -14,20 +14,23 @@ def download(url, initial_path):
     os.mkdir(resource_path)
     html = prepare_soup(html_page, resource_path)
     write_file_to_path(html_page_path, html.encode())
-    # change links to imgs in generated file
     return html_page_path
 
 
 def prepare_soup(html_page, resource_path):
     soup = BeautifulSoup(html_page, 'html.parser')
     images = soup.find_all('img')
+    html = soup.prettify(formatter='html5')
     for img in images:
         link = img['src']
         img_bytes = requests.get(link).content
         img_name = create_name_or_path(link, resource_path, path_needed=False)
         full_path = resource_path + '/' + img_name
         write_file_to_path(full_path, img_bytes)
-    html = soup.prettify(formatter='html5')
+        soup_html = BeautifulSoup(html, 'html.parser')
+        html_image = soup_html.find('img')
+        html_image['src'] = full_path
+        print(html_image['src'])
     return html
 
 
