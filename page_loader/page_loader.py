@@ -16,8 +16,9 @@ def download(url, cli_path):
     path_files_folder = os.path.join(cli_path, name_files_folder)
     os.mkdir(path_folder)
     edited_page, resources = get_links_and_edit_page(html_page, url, path_files_folder)
+    save_file(edited_page, path_page)
 
-    return html_page_path
+    return path_page
 
 
 def is_local(pointer, url):
@@ -37,7 +38,8 @@ def edit_page_and_get_links(html_page, url, path_files_folder):
         link = urljoin(url, element.get(tag, ''))
         if not os.path.splitext(link)[1]:
             resource_path = os.path.join(dir_name, format_local_name(link))
-        resource_path = os.path.join(dir_name, format_local_name(link, file=True))
+        else:
+            resource_path = os.path.join(dir_name, format_local_name(link, file=True))
         element[tag] = resource_path
         result.append((link, os.path.join(dir_path, resource_path)))
     edited_page = soup.prettify()
@@ -72,6 +74,6 @@ def format_resource(string):
     return re.sub(r'/', '-', string)
 
 
-def write_file_to_path(full_path, file):
-    with open(full_path, 'wb') as f:
-        f.write(file)
+def save_file(data, path):
+    with open(path, 'wb') as file:
+        file.write(data)
