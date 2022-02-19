@@ -20,24 +20,28 @@ def download(url, cli_path):
     return html_page_path
 
 
+def is_local(pointer, url):
+    first = urlparse(url).netloc
+    second = urlparse(urljoin(url, pointer)).netloc
+    return first == second
+
+
 def edit_page_and_get_links(html_page, url, path_files_folder):
     dir_path, dir_name = os.path.split(path_files_folder)
     soup = BeautifulSoup(html_page, 'html.parser')
-    elements = [item for items in soup.find_all(list(WANTED_TAGS))]
+    elements = [item for item in soup.find_all(list(WANTED_TAGS))
+                if is_local(item.get(WANTED_TAGS[item.name]), url)]
     result = []
-    images = soup.find_all('img')
-    html = soup.prettify(formatter='html5')
-    for img in images:
-        link = img['src']
-        img_bytes = requests.get(link).content
-        img_name = format_local_name(link, resource_path)
-        full_path = resource_path + '/' + img_name
-        write_file_to_path(full_path, img_bytes)
-        soup_html = BeautifulSoup(html, 'html.parser')
-        html_image = soup_html.find('img')
-        html_image['src'] = full_path
-        print(html_image['src'])
-    return html
+    for element in elements:
+        tag = WANTED_TAGS[element.name]
+        link = urljoin(url, element.get(tag, ''))
+        if not os.path.splitext(link)[1]:
+            resource_path = os.path.join(dir_name, format_local_name(link))
+        resource_path = os.path.join(dir_name, format_local_name(link, file=True))
+        element[tag] = resource_path
+        result.append((link, os.path.join(dir_path, resource_path)))
+    edited_page = soup.prettify()
+    return edited_page
 
 
 def load_page(url):
