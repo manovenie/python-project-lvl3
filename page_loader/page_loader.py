@@ -13,13 +13,12 @@ def download(url, cli_path):
     path_page = os.path.join(cli_path, name_page)
     name_folder = format_local_name(url, dir=True)
     path_folder = os.path.join(cli_path, name_folder)
-    # create dir
     os.mkdir(path_folder)
-    # refactor logic
+
     return html_page_path
 
 
-def prepare_soup(html_page, resource_path):
+def get_links_and_edit_page(html_page, resource_path):
     soup = BeautifulSoup(html_page, 'html.parser')
     images = soup.find_all('img')
     html = soup.prettify(formatter='html5')
