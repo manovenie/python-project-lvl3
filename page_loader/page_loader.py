@@ -1,10 +1,12 @@
 import requests
 import re
 import os
+import logging
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse, urljoin
 
 
+logger = logging.getLogger(__name__)
 WANTED_TAGS = {'link': 'href', 'img': 'src', 'script': 'src'}
 
 
@@ -19,6 +21,7 @@ def download(url, cli_path):
         edit_page_and_get_links(html_page, url, path_files_folder)
     save_file(edited_page, path_page)
     upload_files(resources)
+    logger.debug('Finishing downloading page and resources')
     return path_page
 
 
@@ -55,6 +58,7 @@ def load_page(url):
 
 
 def format_local_name(url, file=None, dir=None):
+    logging.info('Formatting a name')
     link = url.rstrip('/')
     o = urlparse(link)
     name = o.netloc + o.path
@@ -68,12 +72,6 @@ def format_local_name(url, file=None, dir=None):
     else:
         final_name += '.html'
     return final_name
-
-
-def format_resource(string):
-    base = '-'.join(string.split('.')[:-1])
-    string = base + '.png'
-    return re.sub(r'/', '-', string)
 
 
 def save_file(data, path):
