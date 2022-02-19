@@ -17,7 +17,7 @@ def download(url, cli_path):
     os.mkdir(path_folder)
     edited_page, resources = get_links_and_edit_page(html_page, url, path_files_folder)
     save_file(edited_page, path_page)
-
+    upload_files(resources)
     return path_page
 
 
@@ -77,3 +77,9 @@ def format_resource(string):
 def save_file(data, path):
     with open(path, 'wb') as file:
         file.write(data)
+
+def upload_files(source):
+    for link, path in source:
+        r = requests.get(link)
+        data = r.content
+        save_file(data, path)
