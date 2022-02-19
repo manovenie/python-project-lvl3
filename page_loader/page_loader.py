@@ -9,18 +9,11 @@ WANTED_TAGS = ('img')
 
 def download(url, initial_path):
     html_page = get_html_page(url)
-    html_page_path = generate_name_or_path(url, initial_path, extension='.html')
-    # url_formatted = generate_name_or_path(url, initial_path)
-    # create folder for img
-    resource_path = generate_name_or_path(url, initial_path, extension='_files')
+    html_page_path = create_name_or_path(url, initial_path, ext='.html')
+    resource_path = create_name_or_path(url, initial_path, ext='_files')
     os.mkdir(resource_path)
     html = prepare_soup(html_page, resource_path)
     write_file_to_path(html_page_path, html.encode())
-    # os.mkdir(img_folder)
-    # scan all imgs, loop over to get names of imgs,
-    # download img via tags and write them in folder
-    # soup = BeautifulSoup(r.text, 'html.parser')
-    # images = soup.find_all('img')
     # change links to imgs in generated file
     return html_page_path
 
@@ -28,12 +21,12 @@ def download(url, initial_path):
 def prepare_soup(html_page, resource_path):
     soup = BeautifulSoup(html_page, 'html.parser')
     images = soup.find_all('img')
-    for image in images:
-        link = image['src']
-        image_bytes = requests.get(link).content
-        image_name = generate_name_or_path(link, resource_path, path_needed=False)
-        full_path = resource_path + '/' + image_name
-        write_file_to_path(full_path, image_bytes)
+    for img in images:
+        link = img['src']
+        img_bytes = requests.get(link).content
+        img_name = create_name_or_path(link, resource_path, path_needed=False)
+        full_path = resource_path + '/' + img_name
+        write_file_to_path(full_path, img_bytes)
     html = soup.prettify(formatter='html5')
     return html
 
@@ -44,13 +37,13 @@ def get_html_page(url):
         return response.text
 
 
-def generate_name_or_path(url, initial_path, extension=None, path_needed=True):
+def create_name_or_path(url, initial_path, ext=None, path_needed=True):
     url_stripped = re.search(r'(?<=https://).*', url)
     if url_stripped:
         url_without_scheme = url_stripped.group()
         if path_needed:
             file_name = format_str(url_without_scheme)
-            full_path = initial_path + '/' + file_name + extension
+            full_path = initial_path + '/' + file_name + ext
             return full_path
         return format_resource(url_without_scheme)
 
@@ -60,11 +53,8 @@ def format_str(string):
 
 
 def format_resource(string):
-    base = string.split('.')[:-1]
-    base = ''.join(base)
-    ext = string.split('.')[1:]
-    ext = ''.join(ext)
-    string = base + '.' + ext
+    base = '-'.join(string.split('.')[:-1])
+    string = base + '.png'
     return re.sub(r'/', '-', string)
 
 
