@@ -12,7 +12,7 @@ WANTED_TAGS = {'link': 'href', 'img': 'src', 'script': 'src'}
 
 
 def download(url, cli_path):
-    bar = IncrementalBar('Loading page', max=5, suffix=%='%(percent)d%%')
+    bar = IncrementalBar('Loading page', max=5, suffix='%(percent)d%%')
     html_page = load_page(url)
     bar.next()
     name_page = format_local_name(url)
@@ -21,7 +21,7 @@ def download(url, cli_path):
     name_files_folder = format_local_name(url, dir=True)
     path_files_folder = os.path.join(cli_path, name_files_folder)
     bar.next()
-    os.mkdir(path_files_folder)
+    create_dir(path_files_folder)
     bar.next()
     edited_page, resources = \
         edit_page_and_get_links(html_page, url, path_files_folder)
@@ -62,11 +62,27 @@ def edit_page_and_get_links(html_page, url, path_files_folder):
     return edited_page, links
 
 
+def create_dir(path):
+    logging.info('Checking for the directory -> creating it')
+    try:
+        os.mkdir(path)
+    except IOError as e:
+        raise Exception('Your folder is incorrect') from e
+
+
 def load_page(url):
     logging.info('Loading page and getting response')
-    response = requests.get(url)
-    if response.ok:
-        return response.text
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+    except (requests.exceptions.MissingSchema,
+            requests.exceptions.InvalidSchema) as e:
+        raise Exception('Wrong address') from e
+    except requests.exceptions.HTTPError as e:
+        raise Exception('Connection failed') from e:
+    except requests.exceptions.ConnectionError as e:
+        raise Exception('Connection error') from e
+    return response.text
 
 
 def format_local_name(url, file=None, dir=None):
@@ -88,8 +104,11 @@ def format_local_name(url, file=None, dir=None):
 
 def save_file(data, path):
     logging.info('Writing binary info to file, saving it')
-    with open(path, 'wb') as file:
-        file.write(data)
+    try:
+        with open(path, 'wb') as file:
+            file.write(data)
+    except IOError as e:
+        raise Exception('Your folder is incorrect') from e
 
 
 def upload_files(source):
