@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import urlparse, urljoin
 
 
-WANTED_TAGS = ('img')
+WANTED_TAGS = {'link': 'href', 'img': 'src', 'script': 'src'}
 
 
 def download(url, cli_path):
@@ -23,7 +23,7 @@ def download(url, cli_path):
 def edit_page_and_get_links(html_page, url, path_files_folder):
     dir_path, dir_name = os.path.split(path_files_folder)
     soup = BeautifulSoup(html_page, 'html.parser')
-    elements = []
+    elements = [item for items in soup.find_all(list(WANTED_TAGS))]
     result = []
     images = soup.find_all('img')
     html = soup.prettify(formatter='html5')
