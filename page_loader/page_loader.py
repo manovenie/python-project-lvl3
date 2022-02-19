@@ -14,8 +14,9 @@ def download(url, cli_path):
     path_page = os.path.join(cli_path, name_page)
     name_files_folder = format_local_name(url, dir=True)
     path_files_folder = os.path.join(cli_path, name_files_folder)
-    os.mkdir(path_folder)
-    edited_page, resources = get_links_and_edit_page(html_page, url, path_files_folder)
+    os.mkdir(path_files_folder)
+    edited_page, resources = \
+        edit_page_and_get_links(html_page, url, path_files_folder)
     save_file(edited_page, path_page)
     upload_files(resources)
     return path_page
@@ -39,7 +40,8 @@ def edit_page_and_get_links(html_page, url, path_files_folder):
         if not os.path.splitext(link)[1]:
             resource_path = os.path.join(dir_name, format_local_name(link))
         else:
-            resource_path = os.path.join(dir_name, format_local_name(link, file=True))
+            resource_path = \
+                os.path.join(dir_name, format_local_name(link, file=True))
         element[tag] = resource_path
         result.append((link, os.path.join(dir_path, resource_path)))
     edited_page = soup.prettify()
@@ -77,6 +79,7 @@ def format_resource(string):
 def save_file(data, path):
     with open(path, 'wb') as file:
         file.write(data)
+
 
 def upload_files(source):
     for link, path in source:
