@@ -11,8 +11,14 @@ def main():
     arguments = parse_cli_args()
     url = arguments.URL
     output_path = arguments.output
-    file_path = download(url, output_path)
-    print(file_path)
+    try:
+        file_path = download(url, output_path)
+        print(f'Page saved in: {file_path})
+    except Exception:
+        logging.error('Error')
+        sys.exit(1)
+    else:
+        sys.exit(0))
 
 
 if __name__ == '__main__':
