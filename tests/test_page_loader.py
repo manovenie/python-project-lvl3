@@ -51,15 +51,3 @@ def test_load_files():
 def test_errors(URL, path, exception):
     with pytest.raises(Exception):
         download(URL, path)
-'''
-def test_download_html(tmpdir, requests_mock):
-    bytes = Path(PurePath('tests/fixtures/test_page.html')).read_bytes()
-    requests_mock.get(URL_TEST, content=bytes)
-
-    actual_html = download(URL_TEST, tmpdir)
-    actual_page = Path(PurePath(actual_html)).read_bytes()
-    expected_page = bytes
-    apb = BeautifulSoup(actual_page, 'lxml').prettify(formatter='html5')
-    epb = BeautifulSoup(expected_page, 'lxml').prettify(formatter='html5')
-    assert epb == apb
-'''
