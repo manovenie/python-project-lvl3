@@ -51,7 +51,6 @@ def test_load_files():
 def test_errors(URL, path, exception):
     with pytest.raises(Exception):
         download(URL, path)
-
 '''
 def test_download_html(tmpdir, requests_mock):
     bytes = Path(PurePath('tests/fixtures/test_page.html')).read_bytes()
