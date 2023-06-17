@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
+import os
+import tempfile
+
+import pytest
+
 from page_loader import download
 from page_loader.page_loader import format_local_name, upload_files
-import tempfile
-import pytest
-import os
-
 
 URL_TEST = 'http://knopka.ush.ru/'
 

@@ -1,33 +1,47 @@
-import requests
-import re
-import os
 import logging
-from bs4 import BeautifulSoup
-from urllib.parse import urlparse, urljoin
-from progress.bar import IncrementalBar
+import os
+import re
+from urllib.parse import urljoin, urlparse
 
+import requests
+from bs4 import BeautifulSoup
+from progress.bar import IncrementalBar
 
 logger = logging.getLogger(__name__)
 WANTED_TAGS = {'link': 'href', 'img': 'src', 'script': 'src'}
+
+
+class AddressError(Exception):
+    pass
+
+
+class ConnectionError(Exception):
+    pass
 
 
 def download(url, cli_path):
     bar = IncrementalBar('Loading page', max=5, suffix='%(percent)d%%')
     html_page = load_page(url)
     bar.next()
+
     name_page = format_local_name(url)
     path_page = os.path.join(cli_path, name_page)
     bar.next()
+
     name_files_folder = format_local_name(url, dir=True)
     path_files_folder = os.path.join(cli_path, name_files_folder)
     bar.next()
+
     create_dir(path_files_folder)
     bar.next()
+
     edited_page, resources = \
         edit_page_and_get_links(html_page, url, path_files_folder)
     bar.next()
+
     save_file(edited_page, path_page)
     bar.next()
+
     upload_files(resources)
     bar.finish()
     logger.debug('Page and resources loaded')
@@ -77,11 +91,11 @@ def load_page(url):
         response.raise_for_status()
     except (requests.exceptions.MissingSchema,
             requests.exceptions.InvalidSchema) as e:
-        raise Exception('Wrong address') from e
+        raise AddressError('Wrong address') from e
     except requests.exceptions.HTTPError as e:
-        raise Exception('Connection failed') from e
+        raise ConnectionError('Connection failed') from e
     except requests.exceptions.ConnectionError as e:
-        raise Exception('Connection error') from e
+        raise ConnectionError('Connection error') from e
     return response.text
 
 
